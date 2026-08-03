@@ -1,0 +1,60 @@
+{
+  "summary": "Frontend-only testing of Gym Log Offline (Italian, dark theme, AsyncStorage). App loads at preview URL. All bottom tabs (tab-home, tab-calendar, tab-history, tab-progress, tab-settings) render with correct Italian labels. Editor flow verified end-to-end: quick-new opens editor, ex-name-0/ex-notes-0/set-weight-0-0 fillable, wo-save persists workout, editor switches to edit-mode with action bar (wo-duplicate, wo-move, wo-save-template, wo-delete) and URL replaces to /workout/1. Home shows created workout under 'ALLENAMENTO DI OGGI' with muscle group (Petto) and volume (600 kg). History screen finds the workout, and 'history-search' with 'forza' correctly matches by notes. Progress screen shows stat-max/stat-vol/stat-freq and bar chart after selecting exercise. Rest timer overlay opens with rest-timer-remaining (00:59) plus minus/plus/toggle/close controls. MG picker shows 13 default groups + '+ Aggiungi nuovo'. RestPicker has rest-custom-input/rest-custom-apply. Reorder testIDs ex-up/ex-down, ex-dup/ex-del, ex-add-set, ex-apply-all, ex-mg, ex-wtype, ex-rest, ex-start-timer, ex-notes all present on index 0. Console warnings observed: multiple 'Unexpected text node: . A text node cannot be a child of a <View>' errors on History screen (stray whitespace/text in JSX). 'props.pointerEvents is deprecated' and 'useNativeDriver not supported' warnings (informational, expected on web).",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "History screen (app/(tabs)/history.tsx)",
+        "issue": "React Native web logs 'Unexpected text node: . A text node cannot be a child of a <View>' errors when the tab mounts. Indicates stray text or whitespace inside a <View> (a raw string, empty expression, or space between JSX tags). Should be wrapped in <Text> or removed.",
+        "testID": "tab-history",
+        "priority": "MEDIUM"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "Settings",
+        "issues": [
+          "mg-delete-{id} buttons only render for is_custom groups per spec, but the test could not visually confirm a newly added TEST_MG appeared in the list without scrolling; recommend E1 verify that after mg-add the list is refreshed and appended item is scrolled into view / immediately visible."
+        ]
+      }
+    ],
+    "react_native_issues": [
+      {
+        "component": "History screen JSX",
+        "issue": "'Unexpected text node' warning fired multiple times on tab-history mount. A raw text node exists inside a <View>. Reference: /app/frontend/app/(tabs)/history.tsx (search for stray strings/whitespace inside <View>)."
+      },
+      {
+        "component": "Deprecated prop pointerEvents",
+        "issue": "Console warning 'props.pointerEvents is deprecated. Use style.pointerEvents'. Likely coming from a third-party dep or a component using <View pointerEvents=...>. Migrate to style.pointerEvents where applicable in project code."
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/test_reports/iteration_1.json"
+  ],
+  "action_items": [
+    "Fix stray text node inside <View> on History screen (app/(tabs)/history.tsx) to remove 'Unexpected text node' RN warnings.",
+    "Sweep project for <View pointerEvents=...> usages and migrate to style.pointerEvents to silence deprecation warnings.",
+    "Manually verify: after 'mg-add', the newly added custom group appears immediately in the list (may just require ScrollView auto-scroll or is already correct; test could not confirm due to viewport)."
+  ],
+  "critical_code_review_comments": [
+    "workout/[id].tsx line 197: after successful update, setReadOnly(true) is called but the component does not visually change (no read-only styling wired up). Consider removing readOnly state or actually rendering read-only UI.",
+    "Two large duplicated blocks in app/(tabs)/index.tsx (lines 104-125 and 126-147) render nearly identical 'ULTIMO ALLENAMENTO' card. Extract into a single reusable render.",
+    "workout/[id].tsx exceeds ~700 lines threshold when combined with inline Save-Template and Add-Muscle-Group dialogs. Extract the two dialog components into src/components to reduce file size.",
+    "In workout/[id].tsx useEffect(loadWorkout, []) has empty deps but calls loadWorkout (which depends on params). Fine for initial mount but a param change (e.g. template) would not re-fetch. Consider adding [params.id, params.template]."
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "N/A (skipped per request)",
+    "frontend": "~95% (all critical flows verified; only minor RN warnings and one unverified visibility check)"
+  },
+  "seed_data_creation": "One workout was created during test (id=1, date=today, exercise 'Panca piana' 60kg x 10 reps, notes 'forza') via UI. Persisted in AsyncStorage; will remain unless cleared.",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "App is fully offline (no backend calls). Data lives in localStorage (AsyncStorage on web). To reset state during tests: await page.evaluate(() => window.localStorage.clear()); then reload. Use mobile viewport 390x844. RN Modal overlays do not close on Escape - always use the explicit close testID (e.g. rest-picker-close, rest-timer-close) or click the overlay via the visible cancel button before opening the next modal, otherwise subsequent taps hit the overlay. The 'save workout' flow does router.replace to /workout/{id}; wo-back goes to home tabs.",
+  "rca_of_issue": "No critical issues to RCA. The 'Unexpected text node' RN warning on History screen is caused by a stray string or whitespace expression inside a <View> in app/(tabs)/history.tsx. To reproduce: navigate to tab-history and observe browser console. Mitigation: locate any JSX like <View> {' '} </View> or <View>{someString}</View> without a wrapping <Text> and wrap the string in <Text> or remove the whitespace."
+}
