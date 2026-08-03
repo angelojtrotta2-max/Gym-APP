@@ -122,7 +122,7 @@ export default function HistoryScreen() {
               {muscleGroup || "Gruppo muscolare"}
             </Text>
           </TouchableOpacity>
-          {(muscleGroup || search) && (
+          {(muscleGroup || search.length > 0) ? (
             <TouchableOpacity
               testID="history-clear-filters"
               onPress={clearFilters}
@@ -131,7 +131,7 @@ export default function HistoryScreen() {
               <Ionicons name="close" size={14} color={colors.onSurface} />
               <Text style={{ color: colors.onSurface, fontWeight: "700" }}>Pulisci</Text>
             </TouchableOpacity>
-          )}
+          ) : null}
         </ScrollView>
       </View>
 

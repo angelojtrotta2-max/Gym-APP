@@ -64,7 +64,6 @@ export default function WorkoutEditorScreen() {
   const [addMgOpen, setAddMgOpen] = useState(false);
   const [newMgName, setNewMgName] = useState("");
   const [loaded, setLoaded] = useState(false);
-  const [readOnly, setReadOnly] = useState(false);
 
   const loadMuscleGroups = useCallback(async () => {
     const list = await listMuscleGroups();
@@ -194,7 +193,6 @@ export default function WorkoutEditorScreen() {
       } else {
         await updateWorkout(parseInt(params.id as string, 10), payload);
         toast.show("Allenamento aggiornato");
-        setReadOnly(true);
       }
     } catch (e: any) {
       toast.show(e?.message || "Errore salvataggio", "error");
