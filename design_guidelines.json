@@ -1,0 +1,171 @@
+{
+  "app_name": "Gym Log Offline",
+  "personality": "7 Dark-First Utility",
+  "personality_one_liner": "A tactical, high-contrast command center optimized for rapid, sweaty logging and performance tracking.",
+  "color": {
+    "surface": "#09090B",
+    "onSurface": "#F4F4F5",
+    "surfaceSecondary": "#18181B",
+    "onSurfaceSecondary": "#A1A1AA",
+    "surfaceTertiary": "#27272A",
+    "onSurfaceTertiary": "#D4D4D8",
+    "surfaceInverse": "#FAFAFA",
+    "onSurfaceInverse": "#09090B",
+    "brand": "#FF5A00",
+    "brandPrimary": "#FF5A00",
+    "onBrandPrimary": "#FAFAFA",
+    "brandSecondary": "#C2410C",
+    "onBrandSecondary": "#FAFAFA",
+    "brandTertiary": "#431407",
+    "onBrandTertiary": "#FFEDD5",
+    "success": "#10B981",
+    "onSuccess": "#FAFAFA",
+    "warning": "#F59E0B",
+    "onWarning": "#09090B",
+    "error": "#EF4444",
+    "onError": "#FAFAFA",
+    "info": "#3B82F6",
+    "onInfo": "#FAFAFA",
+    "border": "#27272A",
+    "borderStrong": "#3F3F46",
+    "divider": "#27272A"
+  },
+  "typography": {
+    "displayFontFamily": "Barlow Condensed",
+    "textFontFamily": "Satoshi",
+    "scale": {
+      "sm": 12,
+      "base": 14,
+      "lg": 16,
+      "xl": 20,
+      "2xl": 24
+    }
+  },
+  "spacing": {
+    "rule": "Compact visual grouping for data density but generous touch targets (min 44pt height) for inputs and buttons. Use md (12) for margins between data rows.",
+    "xs": 4,
+    "sm": 8,
+    "md": 12,
+    "lg": 16,
+    "xl": 24,
+    "2xl": 32,
+    "3xl": 48
+  },
+  "radius_tokens": {
+    "sm": 6,
+    "md": 12,
+    "lg": 20,
+    "pill": 999
+  },
+  "shadow_tier": "0",
+  "navigation": "bottom_tabs",
+  "icon_set": "Ionicons",
+  "glassmorphism": {
+    "enabled": "false",
+    "do's": [
+      "Use solid surfaceSecondary and strong dividers for performance-first utility"
+    ],
+    "dont's": [
+      "No blur or glassmorphism. This is a tactical workout app; clarity and contrast beat aesthetics."
+    ]
+  },
+  "platform_libraries": {
+    "glass": {
+      "ios": "solid surfaceSecondary",
+      "android": "solid surfaceSecondary",
+      "low_end_android_fallback": "solid surfaceSecondary"
+    },
+    "image": "expo-image",
+    "blur": "expo-blur",
+    "bottom_sheet": "@gorhom/bottom-sheet",
+    "animation": "react-native-reanimated",
+    "gesture": "react-native-gesture-handler"
+  },
+  "screens": [
+    {
+      "name": "Home",
+      "purpose": "Dashboard showing today's date, the active/next workout, and quick actions to start training.",
+      "states": {
+        "loading": "Centered spinner with 'Caricamento...' text",
+        "empty": "No planned workout today: Show empty state illustration with 'Nessun allenamento programmato per oggi' and a primary CTA 'Nuovo Allenamento'",
+        "error": "Error loading data with a Retry button"
+      },
+      "layout": "Top section: Date and a brand-tinted gradient header. Middle section: 'Allenamento di Oggi' card (surfaceSecondary) showing planned exercises. Bottom: Sticky primary CTA 'Inizia Allenamento' fixed above the bottom tab bar. Safe-area accounted for."
+    },
+    {
+      "name": "WorkoutEditor",
+      "purpose": "Live tracking and editing of a workout session, fully offline.",
+      "states": {
+        "loading": "Skeleton loader for exercises",
+        "empty": "No exercises added: Display 'Aggiungi il tuo primo esercizio' with an 'Aggiungi Esercizio' button",
+        "error": "Generic error state"
+      },
+      "layout": "Header: Workout name input and global rest timer. List of Exercise Cards. Each card uses a compact layout: Title on top, column headers (Serie, Peso, Reps, Riposo). Each set is a tight row with numeric inputs (surfaceTertiary background, min-height 44pt) and a trailing checkbox to mark as done. Sticky CTA at the bottom 'Termina Allenamento'."
+    },
+    {
+      "name": "Calendar",
+      "purpose": "Monthly view with highlighted dots on days when workouts occurred.",
+      "states": {
+        "loading": "Calendar skeleton",
+        "empty": "No workouts in selected month.",
+        "error": "Failed to load calendar data"
+      },
+      "layout": "Full-width monthly calendar grid. Dots under dates (brandPrimary) indicate workouts. Tapping a date reveals a scrollable list of workout summary cards for that day below the calendar."
+    },
+    {
+      "name": "History",
+      "purpose": "Archive of all past workouts with powerful filtering.",
+      "states": {
+        "loading": "List skeleton",
+        "empty": "Grayscale weights image + 'Nessun allenamento trovato. Inizia ad allenarti!'",
+        "error": "Error loading history"
+      },
+      "layout": "Top sticky header with a horizontal scrollable row of filter chips (Data, Gruppo muscolare, Esercizio). Below: Scrollable list of workout cards. Each card displays date, total volume, duration, and a truncated list of exercises."
+    },
+    {
+      "name": "Progress",
+      "purpose": "Visualizes strength progression over time with charts.",
+      "states": {
+        "loading": "Chart skeleton",
+        "empty": "Atmospheric dark locker room image + 'Dati insufficienti. Registra più allenamenti per vedere i progressi.'",
+        "error": "Error rendering chart"
+      },
+      "layout": "Exercise selector dropdown at the top. Main content: Line chart (using brandPrimary color) showing 1RM or Max Weight over time. Below chart: stat blocks showing 'Massimo (1RM)', 'Volume totale', and 'Frequenza'."
+    },
+    {
+      "name": "Settings",
+      "purpose": "App configuration, backup/restore JSON/CSV.",
+      "states": {
+        "loading": "Spinner",
+        "empty": "Not applicable",
+        "error": "Not applicable"
+      },
+      "layout": "List of configuration rows (surfaceSecondary). Toggle for Theme (Scuro/Chiaro). Backup section with 'Esporta CSV' and 'Ripristina JSON' buttons using brandSecondary colors."
+    }
+  ],
+  "images": {
+    "home_hero": {
+      "url": "https://images.unsplash.com/photo-1637430308606-86576d8fef3c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1ODB8MHwxfHNlYXJjaHwxfHxkYXJrJTIwYXRtb3NwaGVyaWMlMjBneW0lMjB3ZWlnaHRzfGVufDB8fHx8MTc4NTc4Mjc1NHww&ixlib=rb-4.1.0&q=85",
+      "alt": "dark gym with exercise machines"
+    },
+    "empty_history": {
+      "url": "https://images.unsplash.com/photo-1590487988256-9ed24133863e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1ODB8MHwxfHNlYXJjaHwyfHxkYXJrJTIwYXRtb3NwaGVyaWMlMjBneW0lMjB3ZWlnaHRzfGVufDB8fHx8MTc4NTc4Mjc1NHww&ixlib=rb-4.1.0&q=85",
+      "alt": "exercise equipments in grayscale photography"
+    },
+    "empty_progress": {
+      "url": "https://images.pexels.com/photos/1055613/pexels-photo-1055613.jpeg",
+      "alt": "Dark urban night scene with benches"
+    }
+  },
+  "instructions_to_main_agent": [
+    "Strictly follow the Dark-First Utility guidelines. Pure black is avoided; use the zinc-based deep slate palette (surface: #09090B, surfaceSecondary: #18181B).",
+    "Accent color is a warm, energetic Signal Orange (#FF5A00) indicating heat and effort.",
+    "Compact Exercise Row: Each row must contain Set index, Peso input, Reps input, and a Checkmark button. All fields must sit on one horizontal line per set, using surfaceTertiary for input backgrounds. Ensure inputs are min 44pt height for touch-friendliness even if visually compact.",
+    "Typography: Use Barlow Condensed for numerical data, scores, timers, and large headers. Use Satoshi for readable body text and labels.",
+    "The Rest Timer should be an overlay or fixed module at the top/bottom that vibrates and plays a system sound upon completion. Include 'haptics' on buttons like 'Add Set', 'Check Set', and 'Start Rest'.",
+    "No glassmorphism. Elevated elements must use solid surfaceSecondary and strong borders (#27272A).",
+    "Language is Italian. Always use 'Serie', 'Reps', 'Peso', 'Riposo', 'Inizia Allenamento', etc.",
+    "Sticky primary CTAs ('Inizia Allenamento' / 'Termina Allenamento') must be pinned to the bottom of the screen (above safe area / tab bar) to be always accessible without scrolling.",
+    "Image Scrim Rule: Any time text is overlaid on home_hero, ensure a vertical top-to-bottom linear gradient (transparent to >=70% surfaceInverse) is applied behind the text."
+  ]
+}
